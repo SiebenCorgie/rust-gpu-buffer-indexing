@@ -6,7 +6,13 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-
-
+marpii = {workspace = true, default-features = false, features = ["default_allocator", "logging"]}
+marpii-rmg.workspace = true
+marpii-rmg-tasks.workspace = true
+bytemuck = "1"
+log = "0.4.15"
+anyhow = "1.0.56"
+simple_logger.workspace = true
+shared = {path = "../shared"}
 [build-dependencies]
 spirv-builder.workspace = true

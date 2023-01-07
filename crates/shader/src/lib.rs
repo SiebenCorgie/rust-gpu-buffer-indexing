@@ -1,4 +1,5 @@
 #![cfg_attr(target_arch = "spirv", no_std)]
+#![feature(asm_experimental_arch)]
 // HACK(eddyb) can't easily see warnings otherwise from `spirv-builder` builds.
 //#![deny(warnings)]
 
@@ -12,8 +13,8 @@ use spirv_std::{spirv, RuntimeArray};
 #[cfg(target_arch = "spirv")]
 use spirv_std::num_traits::Float;
 
-
-pub struct TypedBuffer<T>(pub T);
+#[spirv(runtime_array)]
+pub struct TypedBuffer<T: 'static>(pub T);
 impl<T> TypedBuffer<T>{
 
     #[gpu_only]
@@ -41,8 +42,8 @@ impl<T> TypedBuffer<T>{
 pub fn main(
     #[spirv(push_constant)] push: &Push,
     #[spirv(global_invocation_id)] id: UVec3,
-    #[spirv(set = 0, binding = 0, typed_buffer)] buffers_a: &RuntimeArray<TypedBuffer<RuntimeArray<BufTyOne>>>,
-    #[spirv(set = 0, binding = 0, typed_buffer)] buffers_b: &mut RuntimeArray<TypedBuffer<RuntimeArray<BufTyTwo>>>
+    #[spirv(descriptor_set = 0, binding = 0, storage_buffer)] buffers_a: &RuntimeArray<TypedBuffer<RuntimeArray<BufTyOne>>>,
+    #[spirv(descriptor_set = 0, binding = 0, storage_buffer)] buffers_b: &mut RuntimeArray<TypedBuffer<RuntimeArray<BufTyTwo>>>
 ) {
     let widx = id.x;
     if widx > push.size{

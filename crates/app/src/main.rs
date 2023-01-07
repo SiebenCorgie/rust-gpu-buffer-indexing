@@ -134,7 +134,7 @@ impl Task for CopyTask{
 
 fn main() -> Result<(), anyhow::Error> {
     simple_logger::SimpleLogger::new()
-        .with_level(log::LevelFilter::Trace)
+        .with_level(log::LevelFilter::Error)
         .init()
         .unwrap();
     let context = Ctx::new_default_headless(true)?;

@@ -13,10 +13,14 @@ marpii-rmg-shared = {git = "https://gitlab.com/tendsinmende/marpii.git"}
 marpii-rmg-tasks = {git = "https://gitlab.com/tendsinmende/marpii.git"}
 marpii-rmg-task-shared = {git = "https://gitlab.com/tendsinmende/marpii.git"}
 winit = "0.27"
-spirv-std = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block" }
-spirv-builder = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block"}
+spirv-std = { git = "https://github.com/EmbarkStudios/rust-gpu", rev="86d6042204e4c0f9ab04120155636d714037fadc"}
+spirv-builder = { git = "https://github.com/EmbarkStudios/rust-gpu", rev="86d6042204e4c0f9ab04120155636d714037fadc"}
 bytemuck = "1"
 log = "0.4.15"
 ahash = "0.8.2"
 anyhow = "1.0.56"
 simple_logger = "4"
+
+
+[patch."https://github.com/EmbarkStudios/rust-gpu"]
+rustc_codegen_spirv = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block" }

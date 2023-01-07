@@ -69,14 +69,13 @@ pub fn compile_rust_shader(
     };
     Ok(())
 }
-
 #[allow(dead_code)]
-fn build_glsl(path: &str, target: &str) {
+fn build_glsl(path: &str, name: &str, target: &str) {
     //TODO: build all files that do not end with ".glsl". and copy to
     // RESDIR as well.
-
-    if PathBuf::from(target).exists() {
-        std::fs::remove_file(target).unwrap();
+    let target_path = PathBuf::from(target).join(name);
+    if target_path.exists() {
+        std::fs::remove_file(&target_path).unwrap();
     }
 
     let command = std::process::Command::new("glslangValidator")
@@ -84,13 +83,13 @@ fn build_glsl(path: &str, target: &str) {
         .arg("-V")
         .arg(path)
         .arg("-o")
-        .arg(target)
+        .arg(target_path)
         .output()
         .unwrap();
 
     if !command.status.success() {
         println!(
-            "cargo:warning=Out: {:?}",
+            "cargo:warning=Out: {}",
             std::str::from_utf8(&command.stdout).unwrap()
         );
         println!(
@@ -113,11 +112,12 @@ fn clean_up() {
 
 // Builds rust shader crate and all glsl shaders.
 fn main() {
-    println!("cargo:rerun-if-changed=../mosaic_shader");
-    println!("cargo:rerun-if-changed=../resources");
-
     //cleanup resource dir
     clean_up();
-
+    build_glsl(
+        "../shader/glsl/copyshader.comp",
+        "copyglsl.spv",
+        RESDIR,
+    );
     compile_rust_shader("shadercrate", "../shader", RESDIR).unwrap();
 }

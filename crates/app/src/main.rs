@@ -2,10 +2,10 @@ use marpii::{context::Ctx, ash::vk, resources::{ShaderModule, ComputePipeline, P
 use marpii_rmg::{Rmg, BufferHandle, Task};
 use marpii_rmg_task_shared::ResourceHandle;
 use marpii_rmg_tasks::UploadBuffer;
-use shared::BufTyOne;
+use shared::{BufTyOne, BufTyTwo};
 use std::sync::Arc;
 
-const SHADER_COMP: &[u8] = include_bytes!("../../resources/shadercrate.spv");
+const SHADER_COMP: &[u8] = include_bytes!("../../resources/copyglsl.spv");
 
 
 struct CopyTask{
@@ -133,18 +133,30 @@ impl Task for CopyTask{
 
 fn main() -> Result<(), anyhow::Error> {
     simple_logger::SimpleLogger::new()
-        .with_level(log::LevelFilter::Warn)
+        .with_level(log::LevelFilter::Trace)
         .init()
         .unwrap();
     let context = Ctx::new_default_headless(true)?;
     let mut rmg = Rmg::new(context)?;
     let mut task = CopyTask::new(&mut rmg);
-
+    let mut download = marpii_rmg_tasks::DownloadBuffer::new(&mut rmg, task.dst.clone())?;
     rmg.record()
         .add_task(&mut task)
         .unwrap()
+        .add_task(&mut download)
+        .unwrap()
         .execute()
         .unwrap();
+
+    //try download
+    rmg.wait_for_idle();
+    let mut dstbuffer: [BufTyTwo; CopyTask::SRC_DTA.len()] = [BufTyTwo::default(); CopyTask::SRC_DTA.len()];
+    if let Ok(d) = download.download(&mut rmg, &mut dstbuffer){
+        println!("Download ....{}", d);
+        println!("{:?}", dstbuffer);
+    }else{
+        println!("Failed!");
+    }
 
 
     Ok(())

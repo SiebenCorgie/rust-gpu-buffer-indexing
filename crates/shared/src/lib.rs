@@ -30,6 +30,12 @@ pub struct BufTyTwo{
     pub pad: [f32; 2]
 }
 
+impl Default for BufTyTwo{
+    fn default() -> Self {
+        BufTyTwo { new: [42; 4], a: 0.0, b: 0.0, pad: [0.0; 2] }
+    }
+}
+
 #[cfg_attr(
     not(target_arch = "spirv"),
     derive(Clone, Copy, PartialEq, PartialOrd, Debug, Pod, Zeroable)

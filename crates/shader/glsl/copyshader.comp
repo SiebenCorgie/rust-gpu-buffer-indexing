@@ -1,0 +1,56 @@
+#version 460
+
+#extension GL_GOOGLE_include_directive : enable
+#extension GL_EXT_nonuniform_qualifier : require
+
+#include "shared.glsl"
+
+#define BOUNDS 20.0f
+
+struct BufTyOne{
+    float a;
+    float b;
+    vec2 pad;
+};
+
+struct BufTyTwo{
+    uvec4 new;
+    float a;
+    float b;
+    vec2 pad;
+};
+
+//push constants block
+layout( push_constant ) uniform constants{
+    ResHandle src;
+    ResHandle dst;
+    uint size;
+    uint pad;
+} Push;
+
+layout(set = 0, binding = 0) buffer BufA{
+    BufTyOne objects[];
+} global_one[];
+layout(set = 0, binding = 0) buffer BufB{
+    BufTyTwo objects[];
+} global_two[];
+
+
+layout (local_size_x = 64, local_size_y = 1, local_size_z = 1) in;
+void main(){
+  uint widx = gl_GlobalInvocationID.x;
+
+
+  if (widx >= Push.size){
+      return;
+  }
+
+
+  //access and copy
+
+  BufTyOne a = global_one[nonuniformEXT(get_index(Push.src))].objects[widx];
+
+  BufTyTwo b = BufTyTwo(uvec4(4, 3, 2, widx), a.a, a.b, a.pad);
+  //store back
+  global_two[nonuniformEXT(get_index(Push.dst))].objects[widx] = b;
+}

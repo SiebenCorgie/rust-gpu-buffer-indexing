@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 marpii = {workspace = true, default-features = false, features = ["default_allocator", "logging"]}
 marpii-rmg.workspace = true
+marpii-rmg-task-shared.workspace = true
 marpii-rmg-tasks.workspace = true
 bytemuck = "1"
 log = "0.4.15"

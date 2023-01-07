@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 marpii-rmg-task-shared.workspace = true
 spirv-std =  { workspace = true, features = ["glam"]}
+bytemuck.workspace = true

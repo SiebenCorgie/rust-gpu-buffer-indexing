@@ -7,16 +7,22 @@ use bytemuck::{Pod, Zeroable};
 
 #[cfg_attr(
     not(target_arch = "spirv"),
-    derive(Clone, Copy, Hash, PartialEq, PartialOrd, Eq, Debug, Pod, Zeroable)
+    derive(Clone, Copy, PartialEq, PartialOrd, Debug, Pod, Zeroable)
 )]
 #[cfg_attr(target_arch = "spirv", derive(Clone, Copy))]
-#[repr(C)]
+#[repr(C, align(16))]
 pub struct BufTyOne{
     pub a: f32,
     pub b: f32,
     pub pad: [f32; 2],
 }
 
+#[cfg_attr(
+    not(target_arch = "spirv"),
+    derive(Clone, Copy, PartialEq, PartialOrd, Debug, Pod, Zeroable)
+)]
+#[cfg_attr(target_arch = "spirv", derive(Clone, Copy))]
+#[repr(C, align(16))]
 pub struct BufTyTwo{
     pub new: [u32; 4],
     pub a: f32,
@@ -24,9 +30,15 @@ pub struct BufTyTwo{
     pub pad: [f32; 2]
 }
 
+#[cfg_attr(
+    not(target_arch = "spirv"),
+    derive(Clone, Copy, PartialEq, PartialOrd, Debug, Pod, Zeroable)
+)]
+#[cfg_attr(target_arch = "spirv", derive(Clone, Copy))]
+#[repr(C, align(16))]
 pub struct Push{
-    src_hdl: ResourceHandle,
-    dst_hdl: ResourceHandle,
-    size: u32,
-    pad: u32
+    pub src_hdl: ResourceHandle,
+    pub dst_hdl: ResourceHandle,
+    pub size: u32,
+    pub pad: u32
 }

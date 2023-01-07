@@ -1,0 +1,24 @@
+[workspace]
+members = [
+"crates/app",
+"crates/shared",
+"crates/shader",
+]
+
+
+[workspace.dependencies]
+marpii = {path = "../../marpii/crates/marpii", default-features = false, features = ["default_allocator", "logging"]}
+marpii-commands = {path = "../../marpii/crates/marpii-commands"}
+marpii-descriptor = {path = "../../marpii/crates/marpii-descriptor"}
+marpii-rmg = {path = "../../marpii/crates/marpii-rmg"}
+marpii-rmg-shared = {path = "../../marpii/crates/marpii-rmg-shared"}
+marpii-rmg-tasks = {path = "../../marpii/crates/marpii-rmg-tasks/marpii-rmg-tasks"}
+marpii-rmg-task-shared = {path = "../../marpii/crates/marpii-rmg-tasks/marpii-rmg-task-shared"}
+winit = "0.27"
+spirv-std = { git = "https://github.com/EmbarkStudios/rust-gpu", rev="86d6042204e4c0f9ab04120155636d714037fadc"}
+spirv-builder = { git = "https://github.com/EmbarkStudios/rust-gpu", rev="86d6042204e4c0f9ab04120155636d714037fadc"}
+bytemuck = "1"
+log = "0.4.15"
+ahash = "0.8.2"
+anyhow = "1.0.56"
+tinyvec = {version = "1.6.0", features = ["alloc"]}

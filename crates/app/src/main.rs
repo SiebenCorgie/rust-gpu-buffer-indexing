@@ -5,8 +5,9 @@ use marpii_rmg_tasks::UploadBuffer;
 use shared::{BufTyOne, BufTyTwo};
 use std::sync::Arc;
 
-const SHADER_COMP: &[u8] = include_bytes!("../../resources/copyglsl.spv");
-
+const SHADER_COMP_GLSL: &[u8] = include_bytes!("../../resources/copyglsl.spv");
+const SHADER_COMP_RUST: &[u8] = include_bytes!("../../resources/shadercrate.spv");
+const SHADERCODE: &[u8] = SHADER_COMP_GLSL;
 
 struct CopyTask{
     src: BufferHandle<shared::BufTyOne>,
@@ -52,7 +53,7 @@ impl CopyTask{
         let dst = rmg.new_buffer(Self::SRC_DTA.len(), None).unwrap();
 
         //load the holy shader
-        let shader_module = ShaderModule::new_from_bytes(&rmg.ctx.device, SHADER_COMP).unwrap();
+        let shader_module = ShaderModule::new_from_bytes(&rmg.ctx.device, SHADERCODE).unwrap();
         let shader_stage = shader_module.into_shader_stage(vk::ShaderStageFlags::COMPUTE, "main");
         //No additional descriptors for us
         let layout = rmg.resources().bindless_layout();

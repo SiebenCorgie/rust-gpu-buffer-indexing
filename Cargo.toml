@@ -7,13 +7,11 @@ members = [
 
 
 [workspace.dependencies]
-marpii = {path = "../../marpii/crates/marpii", default-features = false, features = ["default_allocator", "logging"]}
-marpii-commands = {path = "../../marpii/crates/marpii-commands"}
-marpii-descriptor = {path = "../../marpii/crates/marpii-descriptor"}
-marpii-rmg = {path = "../../marpii/crates/marpii-rmg"}
-marpii-rmg-shared = {path = "../../marpii/crates/marpii-rmg-shared"}
-marpii-rmg-tasks = {path = "../../marpii/crates/marpii-rmg-tasks/marpii-rmg-tasks"}
-marpii-rmg-task-shared = {path = "../../marpii/crates/marpii-rmg-tasks/marpii-rmg-task-shared"}
+marpii = {git = "https://gitlab.com/tendsinmende/marpii.git", default-features = false, features = ["default_allocator", "logging"]}
+marpii-rmg = {git = "https://gitlab.com/tendsinmende/marpii.git"}
+marpii-rmg-shared = {git = "https://gitlab.com/tendsinmende/marpii.git"}
+marpii-rmg-tasks = {git = "https://gitlab.com/tendsinmende/marpii.git"}
+marpii-rmg-task-shared = {git = "https://gitlab.com/tendsinmende/marpii.git"}
 winit = "0.27"
 spirv-std = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block" }
 spirv-builder = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block"}

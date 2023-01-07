@@ -15,8 +15,8 @@ marpii-rmg-shared = {path = "../../marpii/crates/marpii-rmg-shared"}
 marpii-rmg-tasks = {path = "../../marpii/crates/marpii-rmg-tasks/marpii-rmg-tasks"}
 marpii-rmg-task-shared = {path = "../../marpii/crates/marpii-rmg-tasks/marpii-rmg-task-shared"}
 winit = "0.27"
-spirv-std = { git = "https://github.com/EmbarkStudios/rust-gpu", rev="86d6042204e4c0f9ab04120155636d714037fadc"}
-spirv-builder = { git = "https://github.com/EmbarkStudios/rust-gpu", rev="86d6042204e4c0f9ab04120155636d714037fadc"}
+spirv-std = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block" }
+spirv-builder = { git = "https://github.com/LykenSol/rust-gpu", branch = "buffer-interface-block"}
 bytemuck = "1"
 log = "0.4.15"
 ahash = "0.8.2"

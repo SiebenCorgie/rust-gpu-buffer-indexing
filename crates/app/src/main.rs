@@ -10,35 +10,19 @@ const SHADER_COMP_RUST: &[u8] = include_bytes!("../../resources/shadercrate.spv"
 const SHADERCODE: &[u8] = SHADER_COMP_GLSL;
 
 struct CopyTask{
-    src: BufferHandle<shared::BufTyOne>,
-    dst: BufferHandle<shared::BufTyTwo>,
+    src: BufferHandle<u32>,
+    dst: BufferHandle<u32>,
     push: PushConstant<shared::Push>,
     pipeline: Arc<ComputePipeline>,
 }
 
 impl CopyTask{
 
-    const SRC_DTA: [BufTyOne; 4] = [
-        BufTyOne{
-            a: 1.0,
-            b: 2.0,
-            pad: [0.0; 2]
-        },
-        BufTyOne{
-            a: 3.0,
-            b: 3.0,
-            pad: [0.0; 2]
-        },
-        BufTyOne{
-            a: 4.0,
-            b: 5.0,
-            pad: [0.0; 2]
-        },
-        BufTyOne{
-            a: 6.0,
-            b: 6.0,
-            pad: [0.0; 2]
-        }
+    const SRC_DTA: [u32; 16] = [
+        0, 1, 2, 3,
+        42, 42, 42, 42,
+        u32::MAX, 0, u32::MAX, 0,
+        0, 1, 0, 1,
     ];
     const SUBGROUP_COUNT: u32 = 64;
     fn new(rmg: &mut Rmg) -> Self{
@@ -151,7 +135,7 @@ fn main() -> Result<(), anyhow::Error> {
 
     //try download
     rmg.wait_for_idle();
-    let mut dstbuffer: [BufTyTwo; CopyTask::SRC_DTA.len()] = [BufTyTwo::default(); CopyTask::SRC_DTA.len()];
+    let mut dstbuffer: [u32; CopyTask::SRC_DTA.len()] = [0; CopyTask::SRC_DTA.len()];
     if let Ok(d) = download.download(&mut rmg, &mut dstbuffer){
         println!("Download ....{}", d);
         println!("{:?}", dstbuffer);

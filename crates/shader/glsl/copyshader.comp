@@ -29,10 +29,10 @@ layout( push_constant ) uniform constants{
 } Push;
 
 layout(set = 0, binding = 0) buffer BufA{
-    BufTyOne objects[];
+    uint data[];
 } global_one[];
 layout(set = 0, binding = 0) buffer BufB{
-    BufTyTwo objects[];
+    uint data[];
 } global_two[];
 
 
@@ -45,12 +45,6 @@ void main(){
       return;
   }
 
-
-  //access and copy
-
-  BufTyOne a = global_one[nonuniformEXT(get_index(Push.src))].objects[widx];
-
-  BufTyTwo b = BufTyTwo(uvec4(4, 3, 2, widx), a.a, a.b, a.pad);
-  //store back
-  global_two[nonuniformEXT(get_index(Push.dst))].objects[widx] = b;
+  //Copy
+  global_two[nonuniformEXT(get_index(Push.dst))].data[widx] = global_one[nonuniformEXT(get_index(Push.src))].data[widx];
 }

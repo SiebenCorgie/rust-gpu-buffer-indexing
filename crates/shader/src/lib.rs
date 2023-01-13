@@ -17,48 +17,43 @@ use spirv_std::{spirv, RuntimeArray};
 use spirv_std::num_traits::Float;
 
 #[spirv(typed_buffer)]
-pub struct TypedBuffer<T: Sized + 'static>{
+pub struct TypedBuffer<T: 'static>{
     //borrowing the hidden data trick
     data: u32,
     dataty: PhantomData<T>
 }
-impl<T: Sized + 'static> TypedBuffer<T>{
 
-    #[gpu_only]
-    pub unsafe fn access(&self) -> &T {
-        core::arch::asm! {
-            "%uint = OpTypeInt 32 0",
-            "%uint_0 = OpConstant %uint 0",
-            "%result = OpAccessChain _ {arr} %uint_0",
-            "OpReturnValue %result",
-            arr = in(reg) self,
-            options(noreturn),
-        }
-    }
 
-    #[gpu_only]
-    pub unsafe fn access_mut(&mut self) -> &mut T {
-        core::arch::asm! {
-            "%uint = OpTypeInt 32 0",
-            "%uint_0 = OpConstant %uint 0",
-            "%result = OpAccessChain _ {arr} %uint_0",
-            "OpReturnValue %result",
-            arr = in(reg) self,
-            options(noreturn),
-        }
-    }
-}
-
-impl<T: Sized + 'static> Deref for TypedBuffer<T>{
+impl<T: 'static> Deref for TypedBuffer<T>{
     type Target = T;
+    #[gpu_only]
     fn deref(&self) -> &Self::Target {
-        unsafe{self.access()}
+        unsafe{
+            core::arch::asm! {
+                "%uint = OpTypeInt 32 0",
+                "%uint_0 = OpConstant %uint 0",
+                "%result = OpAccessChain _ {arr} %uint_0",
+                "OpReturnValue %result",
+                arr = in(reg) self,
+                options(noreturn),
+            }
+        }
     }
 }
 
-impl<T: Sized + 'static> DerefMut for TypedBuffer<T>{
+impl<T: 'static> DerefMut for TypedBuffer<T>{
+    #[gpu_only]
     fn deref_mut(&mut self) -> &mut Self::Target {
-        unsafe{self.access_mut()}
+        unsafe{
+            core::arch::asm! {
+                "%uint = OpTypeInt 32 0",
+                "%uint_0 = OpConstant %uint 0",
+                "%result = OpAccessChain _ {arr} %uint_0",
+                "OpReturnValue %result",
+                arr = in(reg) self,
+                options(noreturn),
+            }
+        }
     }
 }
 
@@ -75,12 +70,12 @@ pub fn main(
     }
 
     let a = unsafe{
-        buffers_a.index(push.src_hdl.index() as usize).index(widx as usize)
+        buffers_a.index(push.src_hdl.index() as usize).deref().index(widx as usize)
     };
 
     //store
     unsafe{
-        *buffers_b.index_mut(push.dst_hdl.index() as usize).index_mut(widx as usize) = *a;
+        *buffers_b.index_mut(push.dst_hdl.index() as usize).deref_mut().index_mut(widx as usize) = *a;
     }
 
 }

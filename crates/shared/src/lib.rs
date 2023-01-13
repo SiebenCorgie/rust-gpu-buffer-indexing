@@ -11,7 +11,7 @@ use bytemuck::{Pod, Zeroable};
 )]
 #[cfg_attr(target_arch = "spirv", derive(Clone, Copy))]
 #[repr(C, align(16))]
-pub struct BufTyOne{
+pub struct BufTyOne {
     pub a: f32,
     pub b: f32,
     pub pad: [f32; 2],
@@ -23,16 +23,21 @@ pub struct BufTyOne{
 )]
 #[cfg_attr(target_arch = "spirv", derive(Clone, Copy))]
 #[repr(C, align(16))]
-pub struct BufTyTwo{
+pub struct BufTyTwo {
     pub new: [u32; 4],
     pub a: f32,
     pub b: f32,
-    pub pad: [f32; 2]
+    pub pad: [f32; 2],
 }
 
-impl Default for BufTyTwo{
+impl Default for BufTyTwo {
     fn default() -> Self {
-        BufTyTwo { new: [42; 4], a: 0.0, b: 0.0, pad: [0.0; 2] }
+        BufTyTwo {
+            new: [42; 4],
+            a: 0.0,
+            b: 0.0,
+            pad: [0.0; 2],
+        }
     }
 }
 
@@ -42,9 +47,9 @@ impl Default for BufTyTwo{
 )]
 #[cfg_attr(target_arch = "spirv", derive(Clone, Copy))]
 #[repr(C, align(16))]
-pub struct Push{
+pub struct Push {
     pub src_hdl: ResourceHandle,
     pub dst_hdl: ResourceHandle,
     pub size: u32,
-    pub pad: u32
+    pub pad: u32,
 }

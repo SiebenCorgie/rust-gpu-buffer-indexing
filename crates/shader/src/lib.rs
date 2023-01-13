@@ -6,7 +6,7 @@
 use core::marker::PhantomData;
 use core::ops::{Deref, DerefMut};
 
-use shared::{BufTyOne, BufTyTwo, Push};
+use shared::Push;
 use spirv_std::glam::UVec3;
 
 use spirv_std::macros::gpu_only;
@@ -39,7 +39,6 @@ impl<T> Deref for TypedBuffer<T> {
         }
     }
 }
-
 
 impl<T> DerefMut for TypedBuffer<T> {
     #[gpu_only]
@@ -100,22 +99,23 @@ impl<T> DerefMut for TypedBuffer<[T]> {
 pub fn main(
     #[spirv(push_constant)] push: &Push,
     #[spirv(global_invocation_id)] id: UVec3,
-    #[spirv(descriptor_set = 0, binding = 0, storage_buffer)] buffers_a: &RuntimeArray<TypedBuffer<[u32]>>,
-    #[spirv(descriptor_set = 0, binding = 0, storage_buffer)] buffers_b: &mut RuntimeArray<TypedBuffer<[u32]>>
+    #[spirv(descriptor_set = 0, binding = 0, storage_buffer)] buffers_a: &RuntimeArray<
+        TypedBuffer<[u32]>,
+    >,
+    #[spirv(descriptor_set = 0, binding = 0, storage_buffer)] buffers_b: &mut RuntimeArray<
+        TypedBuffer<[u32]>,
+    >,
 ) {
     let widx = id.x;
-    if widx > push.size{
+    if widx > push.size {
         return;
     }
 
     //load
-    let mut a = unsafe{
-        buffers_a.index(push.src_hdl.index() as usize)[widx as usize]
-    };
+    let a = unsafe { buffers_a.index(push.src_hdl.index() as usize)[widx as usize] };
 
     //store
-    unsafe{
+    unsafe {
         buffers_b.index_mut(push.dst_hdl.index() as usize)[widx as usize] = a;
     }
-
 }

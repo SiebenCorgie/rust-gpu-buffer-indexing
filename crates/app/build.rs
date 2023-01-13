@@ -114,10 +114,6 @@ fn clean_up() {
 fn main() {
     //cleanup resource dir
     clean_up();
-    build_glsl(
-        "../shader/glsl/copyshader.comp",
-        "copyglsl.spv",
-        RESDIR,
-    );
+    build_glsl("../shader/glsl/copyshader.comp", "copyglsl.spv", RESDIR);
     compile_rust_shader("shadercrate", "../shader", RESDIR).unwrap();
 }

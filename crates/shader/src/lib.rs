@@ -40,6 +40,23 @@ impl<T> Deref for TypedBuffer<T> {
     }
 }
 
+
+impl<T> DerefMut for TypedBuffer<T> {
+    #[gpu_only]
+    fn deref_mut(&mut self) -> &mut T {
+        unsafe {
+            core::arch::asm! {
+                "%uint = OpTypeInt 32 0",
+                "%uint_0 = OpConstant %uint 0",
+                "%inner_ptr = OpAccessChain _ {buffer} %uint_0",
+                "OpReturnValue %inner_ptr",
+                buffer = in(reg) self,
+                options(noreturn),
+            }
+        }
+    }
+}
+
 impl<T> Deref for TypedBuffer<[T]> {
     type Target = [T];
     #[gpu_only]

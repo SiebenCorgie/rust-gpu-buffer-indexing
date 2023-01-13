@@ -4,6 +4,7 @@
 //#![deny(warnings)]
 
 use core::marker::PhantomData;
+use core::ops::{Deref, DerefMut};
 
 use shared::{BufTyOne, BufTyTwo, Push};
 use spirv_std::glam::UVec3;
@@ -48,6 +49,19 @@ impl<T: Sized + 'static> TypedBuffer<T>{
     }
 }
 
+impl<T: Sized + 'static> Deref for TypedBuffer<T>{
+    type Target = T;
+    fn deref(&self) -> &Self::Target {
+        unsafe{self.access()}
+    }
+}
+
+impl<T: Sized + 'static> DerefMut for TypedBuffer<T>{
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        unsafe{self.access_mut()}
+    }
+}
+
 #[spirv(compute(threads(64, 1, 1)))]
 pub fn main(
     #[spirv(push_constant)] push: &Push,
@@ -61,16 +75,12 @@ pub fn main(
     }
 
     let a = unsafe{
-        *buffers_a.index(push.src_hdl.index() as usize)
-                 .access()
-                 .index(widx as usize)
+        buffers_a.index(push.src_hdl.index() as usize).index(widx as usize)
     };
 
     //store
     unsafe{
-        *buffers_b.index_mut(push.dst_hdl.index() as usize)
-                  .access_mut()
-                  .index_mut(widx as usize) = a;
+        *buffers_b.index_mut(push.dst_hdl.index() as usize).index_mut(widx as usize) = *a;
     }
 
 }

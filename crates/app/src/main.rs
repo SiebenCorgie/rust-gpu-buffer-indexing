@@ -52,7 +52,7 @@ impl CopyTask{
             shared::Push{
                 src_hdl: ResourceHandle::INVALID,
                 dst_hdl: ResourceHandle::INVALID,
-                size: Self::SRC_DTA.len() as u32,
+                size: Self::SRC_DTA.len() as u32,g
                 pad: 0
             },
             vk::ShaderStageFlags::COMPUTE

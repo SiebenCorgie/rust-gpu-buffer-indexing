@@ -99,7 +99,6 @@ fn build_glsl(path: &str, name: &str, target: &str) {
     }
 }
 
-
 const RESDIR: &'static str = &"../resources";
 
 fn clean_up() {

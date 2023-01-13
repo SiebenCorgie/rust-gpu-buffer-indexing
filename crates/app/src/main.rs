@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 const SHADER_COMP_GLSL: &[u8] = include_bytes!("../../resources/copyglsl.spv");
 const SHADER_COMP_RUST: &[u8] = include_bytes!("../../resources/shadercrate.spv");
-const SHADERCODE: &[u8] = SHADER_COMP_GLSL;
+const SHADERCODE: &[u8] = SHADER_COMP_RUST;
 
 struct CopyTask{
     src: BufferHandle<u32>,

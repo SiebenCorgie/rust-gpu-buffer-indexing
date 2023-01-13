@@ -26,7 +26,9 @@ impl<T: Sized + 'static> TypedBuffer<T>{
     #[gpu_only]
     pub unsafe fn access(&self) -> &T {
         core::arch::asm! {
-            "%result = OpAccessChain _ {arr} 0",
+            "%uint = OpTypeInt 32 0",
+            "%uint_0 = OpConstant %uint 0",
+            "%result = OpAccessChain _ {arr} %uint_0",
             "OpReturnValue %result",
             arr = in(reg) self,
             options(noreturn),
@@ -36,7 +38,9 @@ impl<T: Sized + 'static> TypedBuffer<T>{
     #[gpu_only]
     pub unsafe fn access_mut(&mut self) -> &mut T {
         core::arch::asm! {
-            "%result = OpAccessChain _ {arr} 0",
+            "%uint = OpTypeInt 32 0",
+            "%uint_0 = OpConstant %uint 0",
+            "%result = OpAccessChain _ {arr} %uint_0",
             "OpReturnValue %result",
             arr = in(reg) self,
             options(noreturn),
@@ -68,4 +72,5 @@ pub fn main(
                   .access_mut()
                   .index_mut(widx as usize) = a;
     }
+
 }
